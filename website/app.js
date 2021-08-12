@@ -7,20 +7,8 @@ const date = document.querySelector('#date');
 const temp = document.querySelector('#temp');
 const content = document.querySelector('#content');
 
-// let dataClintSide = {};
 
-// get Date output;
-const getData = async(url) => {
-    const res = await fetch(url);
-    try {
-        dataClintSide = await res.json().then(showTemp);
-    } catch (err) {
-        console.log('getData myError: ' + err);
-    }
-
-};
-
-
+// query save zip code in server side (POST)
 const queryWeather = async(dataQuery) => {
     const res = await fetch('/sendCodeZIP', {
         method: 'POST',
@@ -40,27 +28,40 @@ const queryWeather = async(dataQuery) => {
 };
 
 
+// Get Data (GET)
+const getData = async(url) => {
+    const res = await fetch(url);
+    try {
+        dataClintSide = await res.json()
+            .then(showTemp); // if is good run =>  run showTemp()
+    } catch (err) {
+        console.log('getData myError: ' + err);
+    }
+
+};
+
 // add Event Listener button click 
 generate.addEventListener('click', () => {
+    // object save data
     let dataInput = { 'codeZIP': 0, 'feelings': '' };
 
+    // Check Filed Not Empty
     if (zip.value.length !== 0 && feelings.value.length !== 0) {
+        // Update dataInput
         dataInput.codeZIP = zip.value;
         dataInput.feelings = feelings.value;
 
-        // data Testing: 85001 - hot
 
-        queryWeather(dataInput) // 
-            .then(getData('/route'))
+        queryWeather(dataInput) // Send dataInput server side
+            .then(getData('/route')) // if run good => run getData()
             .catch((err) => console.log(err));
     } else {
         window.alert('not input data');
     }
 
-
 });
 
-// function showTemp(date, temp, content) {
+// show output 
 function showTemp(dataClintSide) {
     temp.textContent = dataClintSide.output.temp;
     date.textContent = dataClintSide.output.date;
