@@ -18,6 +18,7 @@ This project  to create an asynchronous web app that uses Web API and user data 
     npm install node
     npm install express
     npm install body-parser
+    npm install dotenv
 ```
 
 - run command
@@ -35,6 +36,7 @@ This project  to create an asynchronous web app that uses Web API and user data 
     - cors@2.8.5
     - express@4.17.1
     - node-fetch@2.6.1s
+    - dotenv@10.0.0 (environment variables)
 
 ## Tree Project
 

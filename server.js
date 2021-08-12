@@ -1,3 +1,6 @@
+// environment variables
+require('dotenv').config();
+
 // Setup empty JS object to act as endpoint for all routes
 const projectData = {
     'codeZIP': 0,
@@ -34,12 +37,16 @@ app.use(cors());
 app.use(express.static('website'));
 
 
+
+
+
+
 // ------------------ Start code ---------
 
 // API Weatherapi - using
-const keyAPI = '9992788cb97b473b9ea193321211008';
+const keyAPI = process.env.keyAPI_Weatherapi;
 const linkAPI = `https://api.weatherapi.com/v1/forecast.json?key=${keyAPI}&days=3&aqi=no&alerts=no&q=`;
-
+console.log(keyAPI);
 // save code zip request (POST)
 app.post('/sendCodeZIP', (req, res) => {
     const data = req.body; // get data request
@@ -79,5 +86,5 @@ app.get('/route', (req, res) => {
 
 
 // API OpenWeatherMap - NOT using (not for free)
-// const keyAPI = '&appid=b44a2e29455b4a07a5b233954a0e112e';
+// const keyAPI = process.env.keyAPI_OpenWeatherMap;
 // let linkAPI = 'https://pro.openweathermap.org/data/2.5/forecast/climate?zip=';
