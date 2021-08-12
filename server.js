@@ -54,7 +54,6 @@ app.get('/route', (req, res) => {
         projectData.output.temp = output.forecast.forecastday[0].day.avgtemp_c;
         projectData.output.content = output.forecast.forecastday[0].day.condition.text;
         projectData.output.date = output.forecast.forecastday[0].date;
-        console.log(projectData);
         res.send(projectData);
 
     }).catch(() => console.log('get /route: Error'));
@@ -69,7 +68,6 @@ app.post('/sendCodeZIP', (req, res) => {
     const data = req.body;
     projectData.codeZIP = data.codeZIP;
     projectData.feeling = data.feeling;
-    console.log(data.codeZIP);
     res.send(projectData);
 });
 

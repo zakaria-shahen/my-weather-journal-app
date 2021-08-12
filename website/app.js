@@ -43,20 +43,25 @@ const queryWeather = async(dataQuery) => {
 // add Event Listener button click 
 generate.addEventListener('click', () => {
     let dataInput = { 'codeZIP': 0, 'feelings': '' };
-    dataInput.codeZIP = zip.value;
-    dataInput.feelings = zip.feelings;
 
-    // data Testing: 85001 - hot
+    if (zip.value.length !== 0 && feelings.value.length !== 0) {
+        dataInput.codeZIP = zip.value;
+        dataInput.feelings = feelings.value;
 
-    queryWeather(dataInput) // 
-        .then(getData('/route'))
-        .catch((err) => console.log(err));
+        // data Testing: 85001 - hot
+
+        queryWeather(dataInput) // 
+            .then(getData('/route'))
+            .catch((err) => console.log(err));
+    } else {
+        window.alert('not input data');
+    }
+
 
 });
 
 // function showTemp(date, temp, content) {
 function showTemp(dataClintSide) {
-    console.log(dataClintSide);
     temp.textContent = dataClintSide.output.temp;
     date.textContent = dataClintSide.output.date;
     content.textContent = dataClintSide.output.content;
