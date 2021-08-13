@@ -27,6 +27,7 @@ const server = app.listen(port, () => {
 /* Dependencies */
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { copyFileSync } = require('fs');
 
 /* Middleware*/
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,9 +45,9 @@ app.use(express.static('website'));
 // ------------------ Start code ---------
 
 // API Weatherapi - using
-const keyAPI = process.env.keyAPI_Weatherapi;
-const linkAPI = `https://api.weatherapi.com/v1/forecast.json?key=${keyAPI}&days=3&aqi=no&alerts=no&q=`;
-console.log(keyAPI);
+const keyAPI = process.env.keyAPI_OpenWeatherMap;
+const linkAPI = `https://api.openweathermap.org/data/2.5/weather?appid=${keyAPI}&units=metric&zip=`;
+
 // save code zip request (POST)
 app.post('/sendCodeZIP', (req, res) => {
     const data = req.body; // get data request
@@ -72,10 +73,12 @@ const queryAPI = async(codeZIP) => {
 app.get('/route', (req, res) => {
     queryAPI(projectData.codeZIP).then((output) => {
         // update project.output object 
-        projectData.output.temp = output.forecast.forecastday[0].day.avgtemp_c;
-        projectData.output.content = output.forecast.forecastday[0].day.condition.text;
-        projectData.output.date = output.forecast.forecastday[0].date;
+        projectData.output.temp = output.main.temp;
+        projectData.output.content = output.weather[0].description;
 
+        // get date
+        let d = new Date();
+        projectData.output.date = +d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
         // send result 
         res.send(projectData);
 
