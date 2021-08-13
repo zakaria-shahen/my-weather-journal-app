@@ -9,8 +9,8 @@ const content = document.querySelector('#content');
 
 
 // query save zip code in server side (POST)
-const queryWeather = async(dataQuery) => {
-    const res = await fetch('/sendCodeZIP', {
+const queryWeather = async(dataQuery, url) => {
+    const res = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -29,8 +29,8 @@ const queryWeather = async(dataQuery) => {
 
 
 // Get Data (GET)
-const getData = async(url) => {
-    const res = await fetch(url);
+const getData = async() => {
+    const res = await fetch('/all');
     try {
         dataClintSide = await res.json()
             .then(showTemp); // if is good run =>  run showTemp()
@@ -52,8 +52,8 @@ generate.addEventListener('click', () => {
         dataInput.feelings = feelings.value;
 
 
-        queryWeather(dataInput) // Send dataInput server side
-            .then(getData('/route')) // if run good => run getData()
+        queryWeather(dataInput, '/sendCodeZIP') // Send dataInput server side
+            .then(getData()) // if run good => run getData()
             .catch((err) => console.log(err));
     } else {
         window.alert('not input data');
@@ -63,7 +63,7 @@ generate.addEventListener('click', () => {
 
 // show output 
 function showTemp(dataClintSide) {
-    temp.textContent = dataClintSide.output.temp;
-    date.textContent = dataClintSide.output.date;
-    content.textContent = dataClintSide.output.content;
+    temp.innerHTML = dataClintSide.temp;
+    date.innerHTML = dataClintSide.date;
+    content.innerHTML = dataClintSide.feelings;
 }

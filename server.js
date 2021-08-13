@@ -1,16 +1,8 @@
 // environment variables
-require('dotenv').config();
+// require('dotenv').config();
 
 // Setup empty JS object to act as endpoint for all routes
-const projectData = {
-    'codeZIP': 0,
-    'feeling': '',
-    'output': {
-        'temp': 0,
-        'date': 0,
-        'content': 0
-    }
-};
+let projectData = {};
 
 
 // Express to run server and routes
@@ -45,23 +37,24 @@ app.use(express.static('website'));
 // ------------------ Start code ---------
 
 // API Weatherapi - using
-const keyAPI = process.env.keyAPI_OpenWeatherMap;
-const linkAPI = `https://api.openweathermap.org/data/2.5/weather?appid=${keyAPI}&units=metric&zip=`;
+// const keyAPI = process.env.keyAPI_OpenWeatherMap;
+const keyAPI = 'b44a2e29455b4a07a5b233954a0e112e';
 
 // save code zip request (POST)
 app.post('/sendCodeZIP', (req, res) => {
     const data = req.body; // get data request
 
     // update projectDate object
-    projectData.codeZIP = data.codeZIP;
-    projectData.feeling = data.feeling;
+    projectData = data;
+
     res.send(projectData);
 
 });
 
 // fetch data API
-const queryAPI = async(codeZIP) => {
+const queryAPI = async(codeZIP, key) => {
     try {
+        const linkAPI = `https://api.openweathermap.org/data/2.5/weather?appid=${key}&units=imperial&zip=`;
         const newDate = await fetch(linkAPI + codeZIP);
         return await newDate.json();
     } catch (err) {
@@ -69,22 +62,25 @@ const queryAPI = async(codeZIP) => {
     }
 }
 
-// get Weather data request (GET)
-app.get('/route', (req, res) => {
-    queryAPI(projectData.codeZIP).then((output) => {
+// Initialize all route with a callback function
+app.get('/all', sendData);
+
+// Callback function to complete GET '/all'
+function sendData(req, res) {
+    queryAPI(projectData.codeZIP, keyAPI).then((output) => {
         // update project.output object 
-        projectData.output.temp = output.main.temp;
-        projectData.output.content = output.weather[0].description;
+        projectData.temp = output.main.temp;
+        // projectData.content = output.weather[0].description;
 
         // get date
         let d = new Date();
-        projectData.output.date = +d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+        projectData.date = +d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
         // send result 
         res.send(projectData);
 
     }).catch((err) => console.log('get /route: Error', err));
+}
 
-});
 
 
 
