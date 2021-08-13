@@ -46,16 +46,5 @@ app.get('/all', sendData);
 
 // Callback function to complete GET '/all'
 function sendData(req, res) {
-    // .then((output) => {
-
-    //     // // update project.output object 
-    //     // projectData.temp = output.main.temp;
-
-
-    //     // send result 
-    //     res.send(projectData);
-
-    // }).catch((err) => console.log('get /route: Error', err));
-
     res.send(projectData);
 }
