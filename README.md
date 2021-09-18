@@ -14,7 +14,7 @@ This project  to create an asynchronous web app that uses Web API and user data 
 - install ->  run command
 
 ```shell
-    npm install init
+    npm init
     npm install node
     npm install express
     npm install body-parser
